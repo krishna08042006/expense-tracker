@@ -4,10 +4,24 @@ export default function App(){
   const[input,setInput]=useState("");
   const[num,setNum]=useState("");
   const[item,setItem]=useState([]);
+  const[edit,setEdit]=useState(null);
 
   function handleSubmit(){
 
-    if(!input || !num) return;
+    if(edit!=null){
+
+      const updated=item.map((items)=>
+        items.id==edit?{...items,input,num}:items
+      )
+
+      setItem(updated)
+      setInput("")
+      setNum("")
+    }
+
+    else{
+
+    
 
     setItem([...item,{
       id:Date.now(),
@@ -16,10 +30,18 @@ export default function App(){
    setInput("");
    setNum("");
 
+    }
+
   }
 
   function Deletehandle(id){
     setItem(item.filter((items)=>items.id!==id))
+  }
+
+  function HandleEdit(id,input,num){
+   setEdit(id)
+   setInput(input)
+   setNum(num)
   }
 
   return(
@@ -51,7 +73,8 @@ export default function App(){
           <div>
         <td>{items.input}</td>
         <td>{items.num}</td>
-        <button onClick={()=>Deletehandle(items.id)}>delete</button> 
+        <button onClick={()=>Deletehandle(items.id)}>delete</button>
+        <button onClick={()=>HandleEdit(items.id,items.input,items.num)}>Edit</button>
         </div> 
         ))
       }
